@@ -56,23 +56,57 @@ DEFAULT_NOISE = dict(
 
 
 def make_stim_circuit(
-
+    distance: int = 3,
+    rounds: int = 1,
+    memory: str = "z",
+    noise: Optional[dict] = None,
 ) -> stim.Circuit:
     """
     Generates a Stim circuit for the rotated surface code.
 
-    NOTE: This produces a straight forward Stim circuit for surface codes. BUT it is worth reconsidering the circuit setup to use a no-reset-circuit. 
-    With reset: ancilla starts fresh each round. Raw measurement = syndrome that round. Detection event = change between rounds. 
+    NOTE: This produces a straight forward Stim circuit for surface codes. BUT it is worth reconsidering the circuit setup to use a no-reset-circuit.
+    With reset: ancilla starts fresh each round. Raw measurement = syndrome that round. Detection event = change between rounds.
     Without reset: ancilla accumulates. Raw measurement in round k = XOR of all syndromes up to round k.
     The detector definition is identical. The difference is purely in the circuit structure, and avoiding reset errors (X_ERROR after R). But the ancilla is also "live" (potentially decohering) throughout, which causes amplitude dampening.
 
+
+    Parameters
+    ----------
+    distance : int
+        Code distance. Must be a positive odd integer.
+        Distance 3 → 9 data + 8 ancilla = 17 qubits.
+    rounds : int
+        Number of stabilizer measurement rounds. Must be >= 1.
+    memory : str
+        Memory experiment basis: 'z' (default) or 'x'.
+    noise : dict or None
+        Noise model. Keys: after_clifford_depolarization,
+        after_reset_flip_probability, before_measure_flip_probability,
+        before_round_data_depolarization. If None, uses DEFAULT_NOISE.
+        Pass an explicit dict of zeros for a noiseless circuit
+        (needed before stim_to_qiskit).
 
     Returns
     -------
     stim.Circuit
     """
-    
-    return 
+    memory = memory.lower()
+    if memory not in ("z", "x"):
+        raise ValueError(f"memory must be 'z' or 'x', got {memory!r}")
+    if distance < 1 or distance % 2 == 0:
+        raise ValueError(f"distance must be a positive odd integer, got {distance}")
+    if rounds < 1:
+        raise ValueError(f"rounds must be >= 1, got {rounds}")
+
+    if noise is None:
+        noise = DEFAULT_NOISE
+
+    return stim.Circuit.generated(
+        code_task=f"surface_code:rotated_memory_{memory}",
+        distance=distance,
+        rounds=rounds,
+        **noise,
+    )
 
 def get_circuit_info(circuit: stim.Circuit) -> dict:
     """
