@@ -23,3 +23,6 @@ torch>=2.0
 # LDPC v2.x is required (BPOsd class lives there; v1 has only the
 # legacy bp_decoder function).
 ldpc>=2.4
+# --- Test dependencies (CI) ---
+pytest>=8.0
+pytest-cov>=5.0
