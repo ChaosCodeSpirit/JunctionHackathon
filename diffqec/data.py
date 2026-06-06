@@ -5,6 +5,12 @@ import stim
 import torch
 from torch.utils.data import Dataset, Sampler
 
+from .noise import (
+    NoiseModel,
+    IQM_EMERALD_TYPICAL,
+    apply_noise_to_circuit,
+)
+
 
 def generate_dem_samples(
     circuit: stim.Circuit,
@@ -28,13 +34,129 @@ def make_test_circuit(
     rounds: int = 3,
     noise: float = 0.01,
 ) -> stim.Circuit:
-    """Create a Stim rotated surface-code memory-Z circuit."""
+    """Create a Stim rotated surface-code memory-Z circuit.
+
+    .. deprecated::
+        The single-knob phenomenological model is no longer recommended for
+        training the decoder.  Use :func:`make_noisy_circuit` with a
+        :class:`~diffqec.noise.NoiseModel` instead.
+    """
     return stim.Circuit.generated(
         "surface_code:rotated_memory_z",
         distance=distance,
         rounds=rounds,
         after_clifford_depolarization=noise,
     )
+
+
+def make_noisy_circuit(
+    distance: int = 3,
+    rounds: int = 3,
+    noise: Optional[NoiseModel] = None,
+    *,
+    memory: str = "Z",
+    no_reset: bool = False,
+) -> stim.Circuit:
+    """Create a Stim rotated surface-code circuit with a hardware-style noise model.
+
+    Unlike :func:`make_test_circuit`, this generator uses
+    :func:`~diffqec.noise.apply_noise_to_circuit` to inject *per-instruction*
+    error channels: DEPOLARIZE1 after every 1q Clifford, DEPOLARIZE2 after
+    every 2q Clifford, X_ERROR after every measurement and reset, and a
+    Z_ERROR on data qubits at the end of every round.
+
+    Parameters
+    ----------
+    distance, rounds, memory, no_reset
+        Identical semantics to :func:`make_test_circuit`.
+    noise : NoiseModel, optional
+        The hardware-calibrated noise model.  Defaults to
+        :data:`IQM_EMERALD_TYPICAL` (typical 2024 IQM Emerald calibration).
+        Pass ``noise=None`` to obtain a noiseless circuit.
+    """
+    code_task = (
+        "surface_code:rotated_memory_x"
+        if memory.upper() == "X"
+        else "surface_code:rotated_memory_z"
+    )
+    base = stim.Circuit.generated(
+        code_task=code_task,
+        distance=distance,
+        rounds=rounds,
+    )
+    if no_reset:
+        base = stim.Circuit(str(base).replace("MR", "M"))
+    if noise is None:
+        return base
+    return apply_noise_to_circuit(base, noise)
+
+
+def generate_noisy_dem_samples(
+    distance: int = 3,
+    rounds: int = 3,
+    shots: int = 10_000,
+    noise: Optional[NoiseModel] = None,
+    *,
+    seed: Optional[int] = None,
+    memory: str = "Z",
+    no_reset: bool = False,
+) -> Tuple[stim.Circuit, np.ndarray, np.ndarray]:
+    """Generate a (circuit, det_events, obs_flips) triple with realistic noise.
+
+    Returns
+    -------
+    circuit   : the noisy stim.Circuit that was sampled from
+    det_events: (shots, num_detectors) bool
+    obs_flips : (shots, num_observables) bool
+    """
+    if noise is None:
+        noise = IQM_EMERALD_TYPICAL
+    circuit = make_noisy_circuit(
+        distance=distance,
+        rounds=rounds,
+        noise=noise,
+        memory=memory,
+        no_reset=no_reset,
+    )
+    sampler = circuit.compile_detector_sampler(seed=seed)
+    det, obs = sampler.sample(shots, separate_observables=True)
+    return circuit, det, obs
+
+
+def noise_sweep_table(
+    distance: int = 3,
+    rounds: int = 3,
+    shots: int = 5_000,
+    base_noise: Optional[NoiseModel] = None,
+    scales: Tuple[float, ...] = (0.5, 0.75, 1.0, 1.25, 1.5, 2.0),
+    *,
+    seed: int = 0,
+) -> list[dict]:
+    """Run the DEM sampler at several ``scale * base_noise`` strengths.
+
+    Returns one row per scale with the circuit, syndrome, observables, and
+    detector firing rate summary.  This is the function the
+    ``scripts/train_noisy_diffqec.py`` driver uses to materialise the
+    LER-vs-noise curve on LUMI.
+    """
+    if base_noise is None:
+        base_noise = IQM_EMERALD_TYPICAL
+    rows: list[dict] = []
+    for s in scales:
+        noise_s = base_noise.scale(s)
+        circ, det, obs = generate_noisy_dem_samples(
+            distance=distance, rounds=rounds, shots=shots,
+            noise=noise_s, seed=seed + int(s * 1000),
+        )
+        rows.append({
+            "scale": s,
+            "noise": noise_s,
+            "circuit": circ,
+            "det_events": det,
+            "obs_flips": obs,
+            "mean_detector_firing_rate": float(det.mean()),
+        })
+    return rows
 
 
 def reshape_syndrome(

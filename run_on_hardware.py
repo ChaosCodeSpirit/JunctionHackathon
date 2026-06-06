@@ -119,3 +119,35 @@ def decode_hardware_results(
     ler, err = [], []
     return ler, err
 
+
+def make_noisy_hardware_circuit(
+    distance: int = 3,
+    rounds: int = 3,
+    *,
+    noise: "NoiseModel | None" = None,
+    memory: str = "Z",
+    no_reset: bool = False,
+):
+    """Build a *noisy* (but hardware-shaped) Stim circuit for offline training.
+
+    Mirrors :func:`run_hardware_experiment` but returns the circuit that
+    *should* have been executed on the QPU, with a realistic noise model
+    applied.  Use this to (a) validate the decoder against a hardware-like
+    DEM and (b) generate training data on LUMI when you do not have QPU
+    time.
+
+    Parameters
+    ----------
+    distance, rounds, memory, no_reset
+        As in :func:`make_stim_circuit`.
+    noise : NoiseModel, optional
+        Defaults to :data:`IQM_EMERALD_TYPICAL` when ``None``.
+    """
+    from diffqec.data import make_noisy_circuit
+    from diffqec.noise import IQM_EMERALD_TYPICAL
+    return make_noisy_circuit(
+        distance=distance, rounds=rounds,
+        noise=noise or IQM_EMERALD_TYPICAL,
+        memory=memory, no_reset=no_reset,
+    )
+
