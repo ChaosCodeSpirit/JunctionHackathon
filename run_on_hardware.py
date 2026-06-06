@@ -91,6 +91,8 @@ def decode_hardware_results(
     L: int | None = None,
     stim_circuit_noisy=None,
     matcher=None,
+    bp_decoder=None,
+    bp_O=None,
 ) -> tuple[list, list]:
     """
     Decodes the output of extract_syndromes() via your desired decoder.
@@ -98,15 +100,19 @@ def decode_hardware_results(
     Parameters
     ----------
     syndromes          : dict  output of extract_syndromes()
-    decoder            : "mwpm" (default) or "diffqec"
+    decoder            : "mwpm" (default), "bp", or "diffqec"
     model_path         : path to DiffQEC checkpoint (required if decoder="diffqec")
     syndrome_shape     : (rounds, D) expected by DiffQEC model
     L                  : number of logical observables for DiffQEC
-    stim_circuit_noisy : stim.Circuit with noise, used to build the MWPM
-                         matching graph on the fly (only used if decoder="mwpm"
-                         and `matcher` is None).
+    stim_circuit_noisy : stim.Circuit with noise, used to build the MWPM/BP
+                         factor graph on the fly (only used if decoder is
+                         "mwpm"/"bp" and the corresponding pre-built object
+                         is None).
     matcher            : pre-built pymatching.Matching. Recommended for sweeps
                          so the graph isn't rebuilt per batch (mwpm only).
+    bp_decoder         : pre-built ldpc.BpDecoder (bp only).
+    bp_O               : observable matrix from build_bp_decoder (bp only,
+                         required if bp_decoder is provided).
 
     Returns
     -------
@@ -130,7 +136,18 @@ def decode_hardware_results(
             matcher=matcher,
         )
 
+    if decoder == "bp":
+        from bp.integrate import decode_hardware_results_bp
+        ler, err, _confidence = decode_hardware_results_bp(
+            syndromes,
+            stim_circuit_noisy=stim_circuit_noisy,
+            decoder=bp_decoder,
+            O=bp_O,
+            return_confidence=False,
+        )
+        return ler, err
+
     raise ValueError(
-        f"Unknown decoder {decoder!r}. Expected 'mwpm' or 'diffqec'."
+        f"Unknown decoder {decoder!r}. Expected 'mwpm', 'bp', or 'diffqec'."
     )
 

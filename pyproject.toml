@@ -6,6 +6,7 @@ requires-python = ">=3.13"
 dependencies = [
     "iqm-client==34.0.3",
     "iqm-qubit-selector>=0.0.1",
+    "ldpc>=2.4",
     "numpy==2.4.4",
     "pymatching==2.4.0",
     "qiskit==2.4.1",
