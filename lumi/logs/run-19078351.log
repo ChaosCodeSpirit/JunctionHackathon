@@ -1,0 +1,55 @@
+== host   : nid002591
+== date   : 2026-06-06T05:49:34Z
+== account: project_465003017
+== slurm  : job 19078351 on lumi
+  
+  Currently Loaded Modules:
+    1) LUMI/25.09        (S)   5) craype-network-ofi
+    2) craype-x86-milan        6) xpmem/2.11.5-1.3_g73ade43320bc
+    3) craype-accel-host       7) partition/C                    (S)
+    4) libfabric/1.22.0        8) cray-python/3.11.7
+  
+    Where:
+     S:  Module is Sticky, requires --force to unload or purge
+== workdir: /scratch/project_465003017/kkiirikk/junctionhackathon-lumi
+>> Reusing existing site-packages at /scratch/project_465003017/kkiirikk/junctionhackathon-lumi/site-packages
+Imports OK: 2.12.0+cu130 2.4.1 0.17.2
+==
+== Running 54-qubit DiffQEC benchmark
+==
+>> Training DiffQEC on d=5 surface-code syndromes (p=1e-3)...
+  epoch  13/30  loss=0.2832
+  epoch  14/30  loss=0.2774
+  epoch  15/30  loss=0.2818
+  epoch  16/30  loss=0.2832
+  epoch  17/30  loss=0.2802
+  epoch  18/30  loss=0.2792
+  epoch  19/30  loss=0.2781
+  epoch  20/30  loss=0.2788
+  epoch  21/30  loss=0.2759
+  epoch  22/30  loss=0.2760
+  epoch  23/30  loss=0.2763
+  epoch  24/30  loss=0.2727
+  epoch  25/30  loss=0.2794
+  epoch  26/30  loss=0.2753
+  epoch  27/30  loss=0.2715
+  epoch  28/30  loss=0.2802
+  epoch  29/30  loss=0.2826
+  epoch  30/30  loss=0.2769
+
+Saved /scratch/project_465003017/kkiirikk/junctionhackathon-lumi/diffqec_54q.pt  (train_acc=1.0000, elapsed=42.0s)
+>> Running benchmark across p ∈ {1e-4, 3e-4, 1e-3, 3e-3, 1e-2}...
+<frozen runpy>:128: RuntimeWarning: 'benchmarks.q50_54q.benchmark' found in sys.modules after import of package 'benchmarks.q50_54q', but prior to execution of 'benchmarks.q50_54q.benchmark'; this may result in unpredictable behaviour
+       p  LER_raw   LER_mwpm  LER_diffqec  t_mwpm_ms t_diffqec_ms  shots
+--------------------------------------------------------------------------------
+  0.0001   0.0282     0.0282       0.0000      0.003       84.452   8192
+  0.0003   0.0762     0.0762       0.0000      0.003       56.244   8192
+  0.0010   0.2061     0.2061       0.0000      0.002       49.519   8192
+  0.0030   0.4084     0.4084       0.0000      0.003       48.735   8192
+  0.0100   0.5028     0.5028       0.0000      0.003       51.179   8192
+
+Results written to /pfs/lustrep2/scratch/project_465003017/kkiirikk/junctionhackathon-lumi/benchmark_results.json
+==
+== DONE
+==
+-rw-rw---- 1 kkiirikk project_465003017 1044 Jun  6 08:54 benchmark_results.json
