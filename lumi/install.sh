@@ -20,23 +20,25 @@ VENV_DIR="${PROJECT_ROOT}/.venv-lumi"
 LUMI_USER_DEFAULT="siljheis"
 LUMI_USER="${LUMI_USER:-${LUMI_USER_DEFAULT}}"
 
-# Pick a Python: prefer the system python3, fall back to cray-python.
-if command -v python3 >/dev/null 2>&1; then
-    PYTHON_BIN="python3"
-elif command -v python >/dev/null 2>&1; then
-    PYTHON_BIN="python"
-else
-    # Try to load cray-python from any of the supported LUMI stacks.
-    for stack in LUMI/25.03 LUMI/24.11 LUMI/24.03; do
-        module load "${stack}" 2>/dev/null || true
-        if command -v python3 >/dev/null 2>&1; then
-            PYTHON_BIN="python3"; break
-        fi
-    done
-    if [[ -z "${PYTHON_BIN:-}" ]]; then
-        echo "ERROR: no python on PATH and no LUMI/Cray python module loaded." >&2
-        exit 1
+# Pick a Python.  LUMI/25.03 does not put python on PATH by default —
+# you need `module load cray-python` to get a working interpreter.
+# Try a few module loads until we find one.
+for py in "" "cray-python/3.11" "cray-python/3.12" "cray-python"; do
+    if [[ -n "${py}" ]]; then
+        module load "${py}" 2>/dev/null || true
     fi
+    if command -v python3 >/dev/null 2>&1; then
+        PYTHON_BIN="python3"; break
+    fi
+    if command -v python >/dev/null 2>&1; then
+        PYTHON_BIN="python"; break
+    fi
+done
+
+if [[ -z "${PYTHON_BIN:-}" ]]; then
+    echo "ERROR: no python on PATH after trying to load cray-python." >&2
+    echo "  Run 'module avail cray-python' and report the available versions." >&2
+    exit 1
 fi
 
 echo "[lumi/install] project root: ${PROJECT_ROOT}"
