@@ -89,17 +89,24 @@ def decode_hardware_results(
     model_path: str | None = None,
     syndrome_shape: tuple | None = None,
     L: int | None = None,
+    stim_circuit_noisy=None,
+    matcher=None,
 ) -> tuple[list, list]:
     """
     Decodes the output of extract_syndromes() via your desired decoder.
 
     Parameters
     ----------
-    syndromes      : dict  output of extract_syndromes()
-    decoder        : "mwpm" (default) or "diffqec"
-    model_path     : path to DiffQEC checkpoint (required if decoder="diffqec")
-    syndrome_shape : (rounds, D) expected by DiffQEC model
-    L              : number of logical observables for DiffQEC
+    syndromes          : dict  output of extract_syndromes()
+    decoder            : "mwpm" (default) or "diffqec"
+    model_path         : path to DiffQEC checkpoint (required if decoder="diffqec")
+    syndrome_shape     : (rounds, D) expected by DiffQEC model
+    L                  : number of logical observables for DiffQEC
+    stim_circuit_noisy : stim.Circuit with noise, used to build the MWPM
+                         matching graph on the fly (only used if decoder="mwpm"
+                         and `matcher` is None).
+    matcher            : pre-built pymatching.Matching. Recommended for sweeps
+                         so the graph isn't rebuilt per batch (mwpm only).
 
     Returns
     -------
@@ -115,7 +122,15 @@ def decode_hardware_results(
             L=L,
         )
 
-    # Default / placeholder: MWPM or empty
-    ler, err = [], []
-    return ler, err
+    if decoder == "mwpm":
+        from mwpm.integrate import decode_hardware_results_mwpm
+        return decode_hardware_results_mwpm(
+            syndromes,
+            stim_circuit_noisy=stim_circuit_noisy,
+            matcher=matcher,
+        )
+
+    raise ValueError(
+        f"Unknown decoder {decoder!r}. Expected 'mwpm' or 'diffqec'."
+    )
 
