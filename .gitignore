@@ -8,4 +8,12 @@ __pycache__/
 dist/
 build/
 .DS_Store
+
+# Images are usually generated as tests
 *.png
+
+# Use for local testing
+test_notebook.ipynb
+
+# Token information should not be uploaded
+TOKEN.txt

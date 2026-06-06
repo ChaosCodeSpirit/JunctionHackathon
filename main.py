@@ -25,6 +25,9 @@ def test_build_draw_circuit(
             "before_round_data_depolarization": 0.0,
         },
     )
+    coords = stim_circuit.get_final_qubit_coordinates()
+    print(f"Qubit coordinates in stim circuit: {coords}")
+
     qc, stim_to_dense, meas_order = stim_to_qiskit(stim_circuit)
 
     print(f"Qiskit circuit: {qc.num_qubits} qubits, depth {qc.depth()}, "

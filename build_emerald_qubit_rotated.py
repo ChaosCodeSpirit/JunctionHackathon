@@ -12,6 +12,45 @@ OPTIONAL FILE: Allows you to build a custom STIM -> EMERALD mapping.
 """
 
 
+def get_emerald_fidelities() -> tuple[dict, dict]:
+    provider   = IQMProvider(
+        "https://resonance.meetiqm.com",
+        quantum_computer="emerald",
+        token=get_token() 
+    )
+    backend    = provider.get_backend(use_metrics=True)
+
+    qubit_fidelities = {}
+    coupler_fidelities = {}
+
+    if backend.metrics is not None:
+        for q in backend.architecture.qubits:
+            locus = (q,)
+            impl = backend.architecture.gates["prx"].get_default_implementation(locus)
+            qubit_fidelities[q] = backend.metrics.get_gate_fidelity("prx", impl, locus)
+        for locus in backend.architecture.gates["cz"].loci:
+            impl = backend.architecture.gates["cz"].get_default_implementation(locus)
+            coupler_fidelities[locus] = backend.metrics.get_gate_fidelity("cz", impl, locus)
+    
+    return qubit_fidelities, coupler_fidelities
+
+
+def coordinate_to_emerald_qubit(coord):
+    """
+    Helper function to translate a grid coordinate to emerald qubit.
+    """
+
+    
+
+
+def build_emerald_qubit_map_optimizing(
+        stim_circuit: stim.Circuit,
+) -> dict:
+    """
+    Choose a best valid location on the emerald qubit grid for the ECC. (with no need for SWAPs)
+    """
+
+
 def build_emerald_qubit_map(
     stim_circuit: stim.Circuit,
     

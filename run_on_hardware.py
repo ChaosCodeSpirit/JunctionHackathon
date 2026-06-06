@@ -1,9 +1,12 @@
 from surface_code import * 
-from build_emerald_qubit_rotated import *
+#from build_emerald_qubit_rotated import *
 from extract_syndromes import *
 
 
-TOKEN = ""
+def get_token():
+    with open("TOKEN.txt") as f:
+        token = f.readlines()[0]
+        return token
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -61,7 +64,7 @@ def run_hardware_experiment(
     provider   = IQMProvider(
         "https://resonance.meetiqm.com",
         quantum_computer=quantum_computer,
-        token=TOKEN 
+        token=get_token() 
     )
     backend    = provider.get_backend()
 

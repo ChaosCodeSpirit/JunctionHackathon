@@ -4,11 +4,11 @@ version = "0.1.0"
 description = "Add your description here"
 requires-python = ">=3.13"
 dependencies = [
-    "iqm-client==34.0.3",
+    "iqm-client[qiskit]==34.0.3",
     "iqm-qubit-selector>=0.0.1",
     "numpy==2.4.4",
     "pymatching==2.4.0",
-    "qiskit==2.4.1",
+    "qiskit>=1.0,<2.2",
     "qiskit-aer==0.17.2",
     "stim==1.16.0",
 ]
