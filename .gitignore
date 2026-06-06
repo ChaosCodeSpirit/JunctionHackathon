@@ -8,3 +8,11 @@ __pycache__/
 dist/
 build/
 .DS_Store
+
+# LUMI secrets and runtime artifacts
+lumi/.env
+*.pt
+local_bench.json
+test_bench.json
+benchmark_results.json
+lumi/logs/
