@@ -188,6 +188,8 @@ def stim_to_qiskit(stim_circuit: stim.Circuit) -> tuple[QuantumCircuit, dict, li
     all_stim_q    = sorted(set(data_q + anc_q))
     stim_to_dense = {sq: i for i, sq in enumerate(all_stim_q)}
 
+    print(stim_to_dense)
+
     n_qubits = len(all_stim_q)
     n_clbits = stim_circuit.num_measurements # one classical bit per measured qubit
     qc = QuantumCircuit(n_qubits, n_clbits)

@@ -1,5 +1,5 @@
 from surface_code import * 
-#from build_emerald_qubit_rotated import *
+from build_emerald_qubit_rotated import *
 from extract_syndromes import *
 
 
@@ -52,10 +52,10 @@ def run_hardware_experiment(
 
     # OPTIONAL: IF YOU WANT TO ASSIGN QUBIT MAP BY HAND 
     # Map abstract Qiskit qubits to emerald physical qubits
-    qubit_map  = build_emerald_qubit_map(stim_circ)
+    qubit_map  = build_emerald_qubit_map_optimizing(stim_circ)
     
     # HIGHLY RECOMMEND PRINTING THIS, if you are using it.
-    # print(qubit_map)
+    print(qubit_map)
     # initial_layout: Qiskit needs a list where position i = physical qubit for logical i
     n_qubits   = qc.num_qubits
     layout     = [qubit_map.get(i, i) for i in range(n_qubits)]
@@ -70,10 +70,16 @@ def run_hardware_experiment(
 
     # Transpile: Qiskit will insert SWAPs for diagonal CX pairs automatically
     qc_t       = transpile(qc, backend, 
-                           #initial_layout=layout, #IF YOU HAVE AN EMERALD QUBIT MAP AVAILABE, also change optimization_level=1 or 0
-                            optimization_level=3)
+                           initial_layout=layout, #IF YOU HAVE AN EMERALD QUBIT MAP AVAILABE, also change optimization_level=1 or 0
+                            optimization_level=1)
     print(f"Transpiled circuit depth: {qc_t.depth()}  "
           f"(ideal: {qc.depth()}, extra depth from SWAPs)")
+    print(f"Tanspiled circuit ops: {qc_t.count_ops()}  "
+          f"(original {qc.count_ops()})")
+    
+    qc_t.draw(output="mpl", filename="transpiled.png")
+    
+    return None, None
 
     # Run
     job        = backend.run(qc_t, shots=shots)

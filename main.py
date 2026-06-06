@@ -1,4 +1,5 @@
 from surface_code import make_stim_circuit, stim_to_qiskit
+from run_on_hardware import *
 
 
 def test_build_draw_circuit(
@@ -45,6 +46,7 @@ def test_build_draw_circuit(
 
 def main():
     test_build_draw_circuit(out_path="code.png", rounds=1)
+    run_hardware_experiment()
 
 
 if __name__ == "__main__":
