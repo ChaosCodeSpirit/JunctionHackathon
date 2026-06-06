@@ -12,6 +12,7 @@
 |---|---|
 | **[preflight.md](./preflight.md)** | First-time LUMI setup checklist (~30 min) |
 | **[deployment.md](./deployment.md)** | Day-of workflow: sync, setup, submit jobs, collect results |
+| **[storage.md](./storage.md)** | Quota warnings, cleanup, and SBU management |
 
 ## Quick Reference
 
@@ -46,6 +47,7 @@ scancel <jobid>                 # cancel
 |---|---|
 | `$PROJECT` | Code, env, final outputs, git repos |
 | `$SCRATCH` | Large active datasets, checkpoints |
+| `/scratch/$USER` | Per-user scratch (venvs, caches, transient data — no SBU) |
 | `$HOME` | SSH config, dotfiles only — avoid for data and venvs |
 
 ### Key commands for this project
@@ -74,16 +76,18 @@ export SBATCH_ACCOUNT="$LUMI_PROJECT_ACCOUNT"
 | Error | Fix |
 |---|---|
 | `ModuleNotFoundError: No module named 'LUMI'` | Use `module load LUMI/25.09` — NOT 23.09 |
-| `Job violates accounting/QOS policy` | Check budget via `lumi-allocations`; submit with `--account="$LUMI_PROJECT_ACCOUNT"` or export `SBATCH_ACCOUNT` |
+| `Job violates accounting/QOS policy` | Check budget via `lumi-allocations`; confirm `SLURM_JOB_ACCOUNT` is set |
 | `ModuleNotFoundError: No module named 'rocm'` | Run `module load partition/G` before `module load rocm` |
 | GPU work on login node | All GPU jobs MUST go through `sbatch` |
-| Home quota pressure | Move envs/data back under `$PROJECT` or `$SCRATCH`; do not build venvs in `$HOME` |
+| **home directory file count quota exceeded** | Run `bash lumi_deployment/cleanup_lumi.sh --dry-run`, then without flag; see [storage.md](./storage.md) |
+| **storage billing unit / SBU warning** | Check `csc-workspaces`; move idle data from `/project/` to `/scratch/`; see [storage.md](./storage.md) |
 
 ## Scripts in `lumi_deployment/`
 
 | Script | Description |
 |---|---|
-| `setup_lumi_env.sh` | Bootstrap venv + install deps (run once) |
+| `setup_lumi_env.sh` | Bootstrap venv on scratch + cache redirects (run once) |
+| `cleanup_lumi.sh` | Reclaim home file-count quota; re-point caches to scratch |
 | `hello_smoke.sbatch` | Minimal 2-min smoke test (torch/ROCm check) |
 | `diffqec_smoke.sbatch` | Run DiffQEC smoke test + pytest (10 min) |
 | `env.example` | Template for local env vars (gitignored) |
@@ -94,4 +98,5 @@ export SBATCH_ACCOUNT="$LUMI_PROJECT_ACCOUNT"
 - Do NOT run GPU work interactively on login nodes
 - Do NOT hardcode project IDs or account numbers
 - Do NOT put large data in `$HOME`
+- Do NOT build venvs in `$HOME` — `setup_lumi_env.sh` puts them on `/scratch/$USER`
 - Do NOT use deprecated LUMI/23.09 stack

@@ -40,6 +40,7 @@ cd "$PROJECT/JunctionHackathon/lumi_deployment"
 
 # If first time or venv missing:
 bash setup_lumi_env.sh
+source ~/.bashrc   # pick up cache redirects to /scratch
 
 # If venv already exists, just activate:
 source ../venv/bin/activate
@@ -95,7 +96,7 @@ Expected:
 
 ## 5. Collect Results
 
-Results land in `$REPO_DIR/results/<job_name>/<job_id>/` (normally `$PROJECT/JunctionHackathon/results/...`).
+Results land in `$PROJECT_DIR/results/<job_name>/<job_id>/`.
 
 ```bash
 # On LUMI — list results
@@ -124,6 +125,7 @@ cat diffqec_smoke-*.err
 # - module load fail   → module avail; check LUMI/25.09
 # - import error       → re-run setup_lumi_env.sh; only remove venv after confirming its path
 # - partition wrong    → use dev-g for short jobs, standard-g for longer GPU work
+# - home quota hit    → bash lumi_deployment/cleanup_lumi.sh --dry-run (see storage.md)
 ```
 
 ---
@@ -156,19 +158,22 @@ laptop: rsync results back
 | Path | Description |
 |---|---|
 | `$REPO_DIR` / `$PROJECT_DIR` | Repo root on LUMI (normally `$PROJECT/JunctionHackathon`) |
-| `$PROJECT_DIR/venv` | Python venv created by `setup_lumi_env.sh` |
+| `$PROJECT_DIR/venv` | Symlink → `/scratch/$USER/venv-junction` (actual venv on scratch) |
 | `$PROJECT_DIR/results/` | Job outputs (rsync to laptop after runs) |
 | `$PROJECT_DIR/lumi_deployment/` | Deployment scripts |
-| `$SCRATCH` | Large active datasets/checkpoints; avoid `$HOME` for data |
+| `/scratch/$USER/` | Per-user scratch: venvs, caches, active data (no SBU, 90-day purge) |
+| `/scratch/$USER/cache/` | Pip/uv/hf caches (re-pointed by `setup_lumi_env.sh`) |
+
+> **Storage quota hit?** See [storage.md](./storage.md) for cleanup and prevention.
 
 ---
 
 ## Safety Rules
 
 1. **Never run GPU work on login nodes** — always use `sbatch`
-2. **Never hardcode project IDs** — use `--account="$LUMI_PROJECT_ACCOUNT"` or `SBATCH_ACCOUNT`
+2. **Never hardcode project IDs** — use `${SLURM_JOB_ACCOUNT}`
 3. **Never put large data in `$HOME`** — use `$PROJECT` or `$SCRATCH`
-4. **Never build a venv in `$HOME`** — keep it under `$PROJECT` or explicitly set `VENV_DIR` under `$SCRATCH`
+4. **Never build a venv in `$HOME`** — `setup_lumi_env.sh` puts it on `/scratch/$USER`; if you create one manually, build it there too
 5. **Confirm SSH aliases** before every `ssh`/`rsync`
 
 ---
@@ -180,7 +185,7 @@ laptop: rsync results back
 rsync -avP ./ lumi:'$PROJECT/JunctionHackathon/'
 
 # Submit
-export SBATCH_ACCOUNT="$LUMI_PROJECT_ACCOUNT"   # or use --account="$LUMI_PROJECT_ACCOUNT"
+export SBATCH_ACCOUNT="$LUMI_PROJECT_ACCOUNT"
 sbatch --account="$LUMI_PROJECT_ACCOUNT" hello_smoke.sbatch
 sbatch --account="$LUMI_PROJECT_ACCOUNT" diffqec_smoke.sbatch
 
@@ -193,4 +198,4 @@ cat diffqec_smoke-*.out
 rsync -avP lumi:'$PROJECT/JunctionHackathon/results/' ./results/
 ```
 
-For more details, see [README.md](./README.md) and [preflight.md](./preflight.md).
+For more details, see [README.md](./README.md), [preflight.md](./preflight.md), and [storage.md](./storage.md).

@@ -98,15 +98,21 @@ bash setup_lumi_env.sh
 `setup_lumi_env.sh` will:
 1. Purge existing modules
 2. Load LUMI/25.09 + partition/G + rocm + cray-python/3.11.7
-3. Create or update a venv at `$PROJECT_DIR/venv` with `--system-site-packages`
+3. Create or update a venv at `/scratch/$USER/venv-junction` with `--system-site-packages` and symlink it to `$PROJECT_DIR/venv`
 4. Install requirements from `requirements.txt`
 5. Verify key imports: `qiskit`, `stim`, `pymatching`, `numpy`, `torch`
+6. Write an idempotent cache-redirect block to `~/.bashrc` so pip/uv/hf caches go to `/scratch/$USER/cache` instead of `$HOME`
 
-> **Storage rule:** keep the repo and venv under `$PROJECT` (or explicitly set `VENV_DIR` under `$SCRATCH`). Do not build Python environments in `$HOME`.
+> **Why scratch?** A Python venv contains 30–50 k small files. LUMI-G caps your home at 100 k files total. Putting the venv on scratch avoids blowing the quota. The symlink means `source ../venv/bin/activate` still works. See [storage.md](./storage.md) for details.
+
+After bootstrapping, activate the cache redirects:
+```bash
+source ~/.bashrc   # pick up the cache-redirect exports
+```
 
 Expected output:
 ```
-Environment ready at <venv-path>
+Environment ready at /scratch/<user>/venv-junction
 ```
 
 ---
@@ -186,7 +192,8 @@ Monitor with `squeue -u $USER`.
 |---|---|
 | `module load LUMI/25.09` fails | Check `module avail`; system may have different software stack |
 | `cray-python/3.11.7` not found | Try `cray-python/3.11.6` or check `module avail cray-python` |
-| Import errors in venv | Re-run `bash setup_lumi_env.sh`; only remove a venv after confirming its path is `$PROJECT/JunctionHackathon/venv` |
+| Import errors in venv | Re-run `bash setup_lumi_env.sh`; only remove a venv after confirming its path is `/scratch/$USER/venv-junction` |
+| Home file-count quota exceeded | Run `bash lumi_deployment/cleanup_lumi.sh --dry-run` first, then without flag; see [storage.md](./storage.md) |
 | ROCm/GPU not visible | Confirm `module load partition/G` was run before `module load rocm` |
 | Out of budget | Run `lumi-allocations` to check remaining; contact CSC |
 | SSH alias unknown | Ask admin; do NOT guess `lumi` vs `lumi2` vs full hostname |
@@ -198,8 +205,9 @@ Monitor with `squeue -u $USER`.
 ```
 laptop: cp env.example .env  → fill in LUMI_PROJECT_ACCOUNT/SBATCH_ACCOUNT
 lumi:   bash setup_lumi_env.sh
+lumi:   source ~/.bashrc    → pick up cache redirects
 lumi:   sbatch --account="$LUMI_PROJECT_ACCOUNT" hello_smoke.sbatch  → should print SMOKE OK
 lumi:   sbatch --account="$LUMI_PROJECT_ACCOUNT" diffqec_smoke.sbatch → should print SMOKE TEST PASSED
 ```
 
-Once Steps 1-8 complete, you're ready for [deployment.md](./deployment.md) (day-of workflow).
+Once Steps 1-8 complete, you're ready for [deployment.md](./deployment.md) (day-of workflow). See [storage.md](./storage.md) if you hit quota warnings.

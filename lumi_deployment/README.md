@@ -11,11 +11,12 @@
 rsync -avP --exclude='venv/' --exclude='.git/' --exclude='results/' \
   ./ lumi:'$PROJECT/JunctionHackathon/'
 
-# 2. On LUMI — bootstrap (one-time)
+# 2. On LUMI — bootstrap (one-time, puts venv on /scratch)
 cd "$PROJECT/JunctionHackathon/lumi_deployment"
 bash setup_lumi_env.sh
+source ~/.bashrc   # pick up cache redirects to /scratch
 
-# 3. Activate venv
+# 3. Activate venv (symlinked from project root)
 source ../venv/bin/activate
 
 # 4. Run smoke tests
@@ -34,7 +35,8 @@ rsync -avP lumi:'$PROJECT/JunctionHackathon/results/' ./results/
 
 | Script | What it does | Walltime |
 |---|---|---|
-| `setup_lumi_env.sh` | Bootstrap venv + deps under the repo/project area (run once) | N/A |
+| `setup_lumi_env.sh` | Bootstrap venv on scratch + cache redirects (run once) | N/A |
+| `cleanup_lumi.sh` | Reclaim home file-count quota; `--dry-run` first, then live | N/A |
 | `hello_smoke.sbatch` | Minimal torch/ROCm smoke test | 2 min |
 | `diffqec_smoke.sbatch` | DiffQEC smoke + pytest | 10 min |
 | `env.example` | Template for `.env` (no real secrets) | — |
@@ -64,13 +66,31 @@ scancel <jobid>
 - `docs/lumi/README.md` — overview + index
 - `docs/lumi/preflight.md` — first-time setup (~30 min)
 - `docs/lumi/deployment.md` — day-of workflow
+- `docs/lumi/storage.md` — quota warnings, cleanup, and SBU management
 
 ---
 
 ## Safety
 
 - **No GPU work on login nodes** — all GPU jobs go through `sbatch`
-- **No hardcoded project IDs** — use `--account="$LUMI_PROJECT_ACCOUNT"` or `SBATCH_ACCOUNT`
+- **No hardcoded project IDs** — use `${SLURM_JOB_ACCOUNT}`
 - **No large data in `$HOME`** — use `$PROJECT` or `$SCRATCH`
-- **No venvs in `$HOME`** — keep envs under `$PROJECT` or explicitly set `VENV_DIR` under `$SCRATCH`
+- **No venvs in `$HOME`** — `setup_lumi_env.sh` puts them on `/scratch/$USER`; if manual, build there too
 - **Confirm SSH aliases** with your admin — don't assume `lumi`
+
+---
+
+## Storage Quota Hit?
+
+```bash
+# Diagnose
+bash lumi_deployment/cleanup_lumi.sh --dry-run
+
+# Clean up
+bash lumi_deployment/cleanup_lumi.sh
+
+# Still over? Deep clean
+bash lumi_deployment/cleanup_lumi.sh --deep
+```
+
+See `docs/lumi/storage.md` for full details.
