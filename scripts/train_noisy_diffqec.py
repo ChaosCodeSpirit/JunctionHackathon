@@ -152,6 +152,12 @@ def _evaluate(
 ) -> dict:
     """Run inference on the held-out (odd-index) split and return LER stats."""
     decoder = DiffQECDecoder(model, num_steps=T, device=device)
+    # eval_det may be 3D (shots, rounds, D) if ParityDataset reshaped it;
+    # the decoder's syndromes-dict API expects the flat (shots, D) form.
+    if eval_det.ndim == 3:
+        rounds = syndrome_shape[0]
+        shots = eval_det.shape[0]
+        eval_det = eval_det.reshape(shots, rounds * syndrome_shape[1])
     syn = {
         "det_events": eval_det,
         "obs_flips": eval_obs,
@@ -267,12 +273,25 @@ def main() -> None:
             checkpoint_dir=ckpt,
         )
         sweep.append(m)
-        print(
-            f"[noisy-diffqec] scale={s:.3f}  LER={m['ler']}  "
-            f"conf={m['mean_confidence']:.3f}  wall={m['wallclock_s']}s"
-        )
+        # Emit a single-line JSON record so even partial sweeps are
+        # recoverable from the stdout log.
+        print(f"[noisy-diffqec] RESULT {json.dumps(m)}", flush=True)
 
     args.sweep_output.parent.mkdir(parents=True, exist_ok=True)
+    # Read existing rows (if multiple SLURM tasks wrote here) and merge.
+    existing_rows: list[dict] = []
+    if args.sweep_output.exists():
+        try:
+            existing = json.loads(args.sweep_output.read_text())
+            existing_rows = list(existing.get("rows", []))
+        except Exception:
+            existing_rows = []
+    # Dedup by (distance, rounds, scale) — keep the newest.
+    key = lambda r: (r["distance"], r["rounds"], r["scale"])
+    by_key: dict = {key(r): r for r in existing_rows}
+    for r in sweep:
+        by_key[key(r)] = r
+    merged = sorted(by_key.values(), key=key)
     with args.sweep_output.open("w") as f:
         json.dump({
             "base_noise": base_noise.to_dict(),
@@ -280,7 +299,7 @@ def main() -> None:
             "rounds": args.rounds,
             "shots": args.shots,
             "epochs": args.epochs,
-            "rows": sweep,
+            "rows": merged,
         }, f, indent=2)
     print(f"[noisy-diffqec] sweep table -> {args.sweep_output}")
 
