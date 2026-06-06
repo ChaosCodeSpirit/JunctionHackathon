@@ -1,0 +1,10 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": [
+    "README.md",
+    "UsefulResources.md",
+    "docs/lumi/README.md",
+    "docs/lumi/preflight.md",
+    "docs/lumi/deployment.md"
+  ]
+}

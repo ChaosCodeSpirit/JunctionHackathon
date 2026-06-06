@@ -9,6 +9,21 @@ dist/
 build/
 .DS_Store
 
+# LUMI deployment
+.env
+results/
+*.out
+*.err
+
+# LUMI local caches (should never be on home; listed for completeness)
+.cache/
+.ipynb_checkpoints/
+
+# QEC result dumps (large, transient)
+*.npz
+*.npy
+!tests/**/*.npy
+
 # Coverage artifacts
 .coverage
 htmlcov/
@@ -20,5 +35,4 @@ lumi/.env
 local_bench.json
 test_bench.json
 benchmark_results.json
-lumi/logs/
 lumi/logs/
