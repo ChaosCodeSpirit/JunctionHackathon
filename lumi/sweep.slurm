@@ -13,27 +13,27 @@
 # Default: 2 distances (3, 5) × 6 scales (0.5 .. 2.0) = 12 tasks.
 
 #SBATCH --job-name=noisy-diffqec-sweep
-#SBATCH --account=${LUMI_ACCOUNT:-project_465003017}
-#SBATCH --partition=${PARTITION:-small-g}
+#SBATCH --account=project_465003017
+#SBATCH --partition=small-g
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=8
 #SBATCH --gpus-per-node=1
 #SBATCH --mem=64G
-#SBATCH --time=${TIME_LIMIT:-01:00:00}
-#SBATCH --array=0-${ARRAY_MAX:-11}
+#SBATCH --time=01:00:00
+#SBATCH --array=0-11
 #SBATCH --output=lumi/logs/sweep-%A_%a.out
 #SBATCH --error=lumi/logs/sweep-%A_%a.err
 
 set -euo pipefail
 
-PROJECT_ROOT="${PROJECT_ROOT:-$(cd "$(dirname "$0")/.." && pwd)}"
-VENV_DIR="${VENV_DIR:-${PROJECT_ROOT}/.venv-lumi}"
-SWEEP_ROOT="${SWEEP_ROOT:-${PROJECT_ROOT}/ckpts/sweep-${SLURM_JOB_ID:-manual}}"
+PROJECT_ROOT="/scratch/project_465003017/diffqec-noisy"
+VENV_DIR="${PROJECT_ROOT}/.venv-lumi"
+SWEEP_ROOT="${PROJECT_ROOT}/ckpts/sweep-${SLURM_JOB_ID:-manual}"
 SCALES_CSV="${SCALES_CSV:-0.5 0.75 1.0 1.25 1.5 2.0}"
 DISTANCES_CSV="${DISTANCES_CSV:-3 5}"
 
-mkdir -p lumi/logs "${SWEEP_ROOT}"
+mkdir -p "${PROJECT_ROOT}/lumi/logs" "${SWEEP_ROOT}"
 
 # Convert CSVs to bash arrays.
 read -r -a SCALES <<< "${SCALES_CSV}"
@@ -51,7 +51,9 @@ mkdir -p "${CKPT_DIR}"
 
 echo "[sweep.slurm] task ${SLURM_ARRAY_TASK_ID}  d=${DISTANCE}  scale=${SCALE}  host=$(hostname)"
 
-module load LUMI/24.03 partition/G rocm/6.0.3 2>/dev/null || true
+# Load the currently-supported LUMI stack (LUMI/24.03 is deprecated).
+module load LUMI/25.03 2>/dev/null || module load LUMI/24.11 2>/dev/null || true
+module load partition/G 2>/dev/null || true
 source "${VENV_DIR}/bin/activate"
 
 cd "${PROJECT_ROOT}"

@@ -22,29 +22,31 @@
 #     ACCOUNT       SLURM billing project         (override on cmdline)
 
 #SBATCH --job-name=noisy-diffqec
-#SBATCH --account=${LUMI_ACCOUNT:-project_465003017}
-#SBATCH --partition=${PARTITION:-small-g}
+#SBATCH --account=project_465003017
+#SBATCH --partition=small-g
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=8
 #SBATCH --gpus-per-node=1
 #SBATCH --mem=64G
-#SBATCH --time=${TIME_LIMIT:-00:30:00}
+#SBATCH --time=00:30:00
 #SBATCH --output=lumi/logs/train-%j.out
 #SBATCH --error=lumi/logs/train-%j.err
 
 set -euo pipefail
 
-PROJECT_ROOT="${PROJECT_ROOT:-$(cd "$(dirname "$0")/.." && pwd)}"
-VENV_DIR="${VENV_DIR:-${PROJECT_ROOT}/.venv-lumi}"
-CKPT_DIR="${CKPT_DIR:-${PROJECT_ROOT}/ckpts/lumi-train-${SLURM_JOB_ID:-manual}}"
+PROJECT_ROOT="/scratch/project_465003017/diffqec-noisy"
+VENV_DIR="${PROJECT_ROOT}/.venv-lumi"
+CKPT_DIR="${PROJECT_ROOT}/ckpts/lumi-train-${SLURM_JOB_ID:-manual}"
 
-mkdir -p lumi/logs "${CKPT_DIR}"
+mkdir -p "${PROJECT_ROOT}/lumi/logs" "${CKPT_DIR}"
 
 echo "[train.slurm] job ${SLURM_JOB_ID:-manual} on $(hostname)"
 echo "[train.slurm] project=${PROJECT_ROOT}  ckpt=${CKPT_DIR}"
 
-module load LUMI/24.03 partition/G rocm/6.0.3 2>/dev/null || true
+# Load the currently-supported LUMI stack (LUMI/24.03 is deprecated).
+module load LUMI/25.03 2>/dev/null || module load LUMI/24.11 2>/dev/null || true
+module load partition/G 2>/dev/null || true
 source "${VENV_DIR}/bin/activate"
 
 export HF_HOME=/scratch/${SLURM_JOB_USER:-${LUMI_USER:-siljheis}}/hf-cache

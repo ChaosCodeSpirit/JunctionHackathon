@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
 # Install the noisy-diffqec stack on a LUMI login node.
 #
-# LUMI ships with Python 3.10 / 3.11 in the LUMI/24.03 stack and a ROCm-aware
-# PyTorch module.  We use a conda-based venv (not the module's PyTorch) so
-# that our pip-installed PyTorch matches the system ROCm and we keep the
-# project's `pip install -e .` workflow.
+# LUMI ships a Cray Python in the LUMI software stack.  We pin to the
+# currently-supported LUMI/25.03 stack (LUMI/24.03 is deprecated due to
+# ROCm / OS-stack changes — see the Lmod warning at login) and use the
+# ROCm-aware PyTorch wheel that matches its driver.
 #
 # Usage on a LUMI login node:
-#     module load LUMI/24.03 partition/G
-#     module load cray-python/3.11
+#     module load LUMI/25.03 partition/G
 #     bash lumi/install.sh
 #
 # The script is idempotent: re-running it only refreshes the venv if
@@ -18,18 +17,42 @@ set -euo pipefail
 
 PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 VENV_DIR="${PROJECT_ROOT}/.venv-lumi"
-PYTHON_BIN="${PYTHON:-python}"
 LUMI_USER_DEFAULT="siljheis"
 LUMI_USER="${LUMI_USER:-${LUMI_USER_DEFAULT}}"
+
+# Pick a Python: prefer the system python3, fall back to cray-python.
+if command -v python3 >/dev/null 2>&1; then
+    PYTHON_BIN="python3"
+elif command -v python >/dev/null 2>&1; then
+    PYTHON_BIN="python"
+else
+    # Try to load cray-python from any of the supported LUMI stacks.
+    for stack in LUMI/25.03 LUMI/24.11 LUMI/24.03; do
+        module load "${stack}" 2>/dev/null || true
+        if command -v python3 >/dev/null 2>&1; then
+            PYTHON_BIN="python3"; break
+        fi
+    done
+    if [[ -z "${PYTHON_BIN:-}" ]]; then
+        echo "ERROR: no python on PATH and no LUMI/Cray python module loaded." >&2
+        exit 1
+    fi
+fi
 
 echo "[lumi/install] project root: ${PROJECT_ROOT}"
 echo "[lumi/install] venv dir    : ${VENV_DIR}"
 echo "[lumi/install] LUMI user   : ${LUMI_USER}"
+echo "[lumi/install] python      : ${PYTHON_BIN}  ($(${PYTHON_BIN} --version 2>&1))"
 
 # 1. LUMI-side ROCm toolchain ------------------------------------------------
-module load LUMI/24.03 2>/dev/null || true
+# Try the supported stacks in order; ignore failures (Lmod can be chatty).
+for stack in LUMI/25.03 LUMI/24.11; do
+    if module load "${stack}" 2>/dev/null; then
+        echo "[lumi/install] loaded ${stack}"
+        break
+    fi
+done
 module load partition/G 2>/dev/null || true
-module load rocm/6.0.3 2>/dev/null || true
 
 # Sanity check: confirm we are on a LUMI login node before we start
 # modifying the user environment.
@@ -49,14 +72,16 @@ python -m pip install --upgrade pip wheel
 
 # 3. Install project + LUMI-specific extras ----------------------------------
 echo "[lumi/install] installing project requirements..."
-pip install -r "${PROJECT_ROOT}/requirements.txt"
+# Filter out the original torch pin (we install a ROCm wheel below).
+grep -v "^torch" "${PROJECT_ROOT}/requirements.txt" \
+    | pip install -r /dev/stdin
 
-# LUMI-G: torch wheels are usually provided by the system module.  If we
-# don't pick one up, fall back to a ROCm-enabled pip wheel.
+# LUMI-G: install a ROCm PyTorch wheel that matches the current driver.
+# On LUMI/25.03 the system ROCm is 6.2.
 if ! python -c "import torch; assert torch.cuda.is_available()" 2>/dev/null; then
-    echo "[lumi/install] installing ROCm PyTorch wheel..."
-    pip install --index-url https://download.pytorch.org/whl/rocm6.0 \
-        "torch>=2.4,<2.6"
+    echo "[lumi/install] installing ROCm PyTorch wheel (rocm6.2)..."
+    pip install --index-url https://download.pytorch.org/whl/rocm6.2 \
+        "torch>=2.5,<2.7"
 fi
 
 # Install the project itself so `import diffqec` works on compute nodes.
@@ -71,3 +96,4 @@ print(f"[lumi/install] diffqec={diffqec.__file__}")
 PY
 
 echo "[lumi/install] done.  Activate with:  source ${VENV_DIR}/bin/activate"
+
