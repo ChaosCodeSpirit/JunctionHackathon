@@ -1,4 +1,4 @@
-from surface_code import * 
+from surface_code import *
 from build_emerald_qubit_rotated import *
 from extract_syndromes import *
 
@@ -93,26 +93,53 @@ def run_hardware_experiment(
 
 
 def decode_hardware_results(
-    syndromes: dict
-) -> tuple[float, float]:
+    syndromes: dict,
+    decoder: str = "mwpm",
+    model_path: str | None = None,
+    syndrome_shape: tuple | None = None,
+    L: int | None = None,
+    stim_circuit_noisy=None,
+    matcher=None,
+) -> tuple[list, list]:
     """
     Decodes the output of extract_syndromes() via your desired decoder.
 
-    NOTE: Other parameters can be important for this function, such as a noise model. 
-
-
     Parameters
     ----------
-    syndromes           : dict  output of extract_syndromes()
+    syndromes          : dict  output of extract_syndromes()
+    decoder            : "mwpm" (default) or "diffqec"
+    model_path         : path to DiffQEC checkpoint (required if decoder="diffqec")
+    syndrome_shape     : (rounds, D) expected by DiffQEC model
+    L                  : number of logical observables for DiffQEC
+    stim_circuit_noisy : stim.Circuit with noise, used to build the MWPM
+                         matching graph on the fly (only used if decoder="mwpm"
+                         and `matcher` is None).
+    matcher            : pre-built pymatching.Matching. Recommended for sweeps
+                         so the graph isn't rebuilt per batch (mwpm only).
 
     Returns
     -------
-    ler : float   estimated logical error rate
-    err : float   OPTIONAL 1-sigma statistical error
+    ler : list[float]  — per-observable logical error rate
+    err : list[float]  — 1-sigma statistical error per observable
     """
+    if decoder == "diffqec":
+        from diffqec.integrate import decode_hardware_results_diffqec
+        return decode_hardware_results_diffqec(
+            syndromes,
+            model_path=model_path,
+            syndrome_shape=syndrome_shape,
+            L=L,
+        )
 
-    # USE e.g. PyMatching to decode
+    if decoder == "mwpm":
+        from mwpm.integrate import decode_hardware_results_mwpm
+        return decode_hardware_results_mwpm(
+            syndromes,
+            stim_circuit_noisy=stim_circuit_noisy,
+            matcher=matcher,
+        )
 
-    ler,err = [], []
-    return ler, err
+    raise ValueError(
+        f"Unknown decoder {decoder!r}. Expected 'mwpm' or 'diffqec'."
+    )
 
