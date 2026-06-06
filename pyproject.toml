@@ -13,3 +13,9 @@ dependencies = [
     "stim==1.16.0",
     "torch>=2.0",
 ]
+
+[tool.setuptools.packages.find]
+# The project is a flat layout with three top-level Python packages.
+# `scripts/` is excluded (it has __init__.py but is not a library).
+include = ["diffqec*", "iqm_utils*"]
+exclude = ["scripts*", "tests*", "lumi*", "build*", "dist*"]
