@@ -1,0 +1,974 @@
+{
+  "coupler_fidelities": {
+    "QB1-QB2": 0.9963264357180348,
+    "QB1-QB5": 0.996986827731499,
+    "QB11-QB10": 0.9948842326913648,
+    "QB11-QB12": 0.9974368525616928,
+    "QB11-QB19": 0.995036933823856,
+    "QB11-QB5": 0.995503947007754,
+    "QB13-QB12": 0.969407294891706,
+    "QB13-QB14": 0.9907042984668358,
+    "QB13-QB21": 0.9850531558076336,
+    "QB13-QB7": 0.994369798866242,
+    "QB16-QB15": 0.9911765416554618,
+    "QB16-QB17": 0.9980986952717704,
+    "QB16-QB24": 0.9907052756512172,
+    "QB16-QB8": 0.9858679663900488,
+    "QB18-QB10": 0.9985703852393568,
+    "QB18-QB17": 0.9902444836920272,
+    "QB18-QB19": 0.990310639559048,
+    "QB18-QB26": 0.9950783978750152,
+    "QB20-QB12": 0.9214810542959446,
+    "QB20-QB19": 0.9812628586043096,
+    "QB20-QB21": 0.9955060430708812,
+    "QB20-QB28": 0.9856776390241032,
+    "QB22-QB14": 0.981407792425022,
+    "QB22-QB21": 0.9899428427204142,
+    "QB22-QB30": 0.9901293633810622,
+    "QB23-QB15": 0.9568781886706852,
+    "QB23-QB24": 0.9940755005287792,
+    "QB25-QB17": 0.9841468557930642,
+    "QB25-QB24": 0.9965246180017178,
+    "QB25-QB26": 0.9899933315740266,
+    "QB25-QB33": 0.99271991507237,
+    "QB27-QB19": 0.975763390390796,
+    "QB27-QB26": 0.9985778170428714,
+    "QB27-QB28": 0.9844831061325184,
+    "QB27-QB35": 0.9907848068644184,
+    "QB29-QB21": 0.9988661492265714,
+    "QB29-QB28": 0.9822239972655904,
+    "QB29-QB30": 0.9956365916673884,
+    "QB29-QB37": 0.9905889448901825,
+    "QB31-QB30": 0.9909964347596908,
+    "QB31-QB39": 0.9968929649901568,
+    "QB32-QB33": 0.9938314589192992,
+    "QB32-QB40": 0.9926602964989034,
+    "QB34-QB26": 0.9960958570980004,
+    "QB34-QB33": 0.9969675085662526,
+    "QB34-QB35": 0.9985915322085424,
+    "QB34-QB42": 0.9952253948782036,
+    "QB36-QB28": 0.9828787802987344,
+    "QB36-QB35": 0.9988015266440482,
+    "QB36-QB37": 0.9901948795289124,
+    "QB36-QB44": 0.9701650497613752,
+    "QB38-QB30": 0.9845977332767772,
+    "QB38-QB37": 0.9858281901970236,
+    "QB38-QB39": 0.9784059268853004,
+    "QB38-QB46": 0.7990194488336917,
+    "QB4-QB10": 0.998620547366261,
+    "QB4-QB3": 0.9970878554368252,
+    "QB4-QB5": 0.9938643808787028,
+    "QB41-QB33": 0.9984450326592008,
+    "QB41-QB40": 0.99560723830182,
+    "QB41-QB42": 0.9962743640849198,
+    "QB41-QB47": 0.9956947853797578,
+    "QB43-QB35": 0.9499537889665424,
+    "QB43-QB42": 0.9873915317857732,
+    "QB43-QB44": 0.9938947273739754,
+    "QB43-QB49": 0.9872381455086474,
+    "QB44-QB50": 0.996709048370104,
+    "QB45-QB37": 0.9960502564957008,
+    "QB45-QB44": 0.9946151194666768,
+    "QB45-QB51": 0.9930266723838844,
+    "QB48-QB42": 0.9971486091312932,
+    "QB48-QB47": 0.9966852435036724,
+    "QB48-QB49": 0.9849142513811866,
+    "QB48-QB52": 0.9860765836862044,
+    "QB50-QB51": null,
+    "QB53-QB49": 0.995641923247716,
+    "QB53-QB52": 0.9954209041456668,
+    "QB53-QB54": 0.9983810657803336,
+    "QB6-QB12": 0.9949505008404652,
+    "QB6-QB2": 0.9983214638183744,
+    "QB6-QB5": 0.9929124373474992,
+    "QB6-QB7": 0.9910016092831746,
+    "QB9-QB10": 0.986332476715715,
+    "QB9-QB17": 0.9898968895511172,
+    "QB9-QB3": 0.9881467921890956,
+    "QB9-QB8": 0.980685994491093
+  },
+  "couplers": [
+    {
+      "calibrated": true,
+      "fidelity": 0.9963264357180348,
+      "qubit_a": "QB1",
+      "qubit_b": "QB2"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.996986827731499,
+      "qubit_a": "QB1",
+      "qubit_b": "QB5"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9970878554368252,
+      "qubit_a": "QB4",
+      "qubit_b": "QB3"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9938643808787028,
+      "qubit_a": "QB4",
+      "qubit_b": "QB5"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.998620547366261,
+      "qubit_a": "QB4",
+      "qubit_b": "QB10"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9983214638183744,
+      "qubit_a": "QB6",
+      "qubit_b": "QB2"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9929124373474992,
+      "qubit_a": "QB6",
+      "qubit_b": "QB5"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9910016092831746,
+      "qubit_a": "QB6",
+      "qubit_b": "QB7"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9949505008404652,
+      "qubit_a": "QB6",
+      "qubit_b": "QB12"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9881467921890956,
+      "qubit_a": "QB9",
+      "qubit_b": "QB3"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.980685994491093,
+      "qubit_a": "QB9",
+      "qubit_b": "QB8"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.986332476715715,
+      "qubit_a": "QB9",
+      "qubit_b": "QB10"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9898968895511172,
+      "qubit_a": "QB9",
+      "qubit_b": "QB17"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.995503947007754,
+      "qubit_a": "QB11",
+      "qubit_b": "QB5"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9948842326913648,
+      "qubit_a": "QB11",
+      "qubit_b": "QB10"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9974368525616928,
+      "qubit_a": "QB11",
+      "qubit_b": "QB12"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.995036933823856,
+      "qubit_a": "QB11",
+      "qubit_b": "QB19"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.994369798866242,
+      "qubit_a": "QB13",
+      "qubit_b": "QB7"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.969407294891706,
+      "qubit_a": "QB13",
+      "qubit_b": "QB12"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9907042984668358,
+      "qubit_a": "QB13",
+      "qubit_b": "QB14"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9850531558076336,
+      "qubit_a": "QB13",
+      "qubit_b": "QB21"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9858679663900488,
+      "qubit_a": "QB16",
+      "qubit_b": "QB8"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9911765416554618,
+      "qubit_a": "QB16",
+      "qubit_b": "QB15"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9980986952717704,
+      "qubit_a": "QB16",
+      "qubit_b": "QB17"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9907052756512172,
+      "qubit_a": "QB16",
+      "qubit_b": "QB24"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9985703852393568,
+      "qubit_a": "QB18",
+      "qubit_b": "QB10"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9902444836920272,
+      "qubit_a": "QB18",
+      "qubit_b": "QB17"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.990310639559048,
+      "qubit_a": "QB18",
+      "qubit_b": "QB19"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9950783978750152,
+      "qubit_a": "QB18",
+      "qubit_b": "QB26"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9214810542959446,
+      "qubit_a": "QB20",
+      "qubit_b": "QB12"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9812628586043096,
+      "qubit_a": "QB20",
+      "qubit_b": "QB19"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9955060430708812,
+      "qubit_a": "QB20",
+      "qubit_b": "QB21"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9856776390241032,
+      "qubit_a": "QB20",
+      "qubit_b": "QB28"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.981407792425022,
+      "qubit_a": "QB22",
+      "qubit_b": "QB14"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9899428427204142,
+      "qubit_a": "QB22",
+      "qubit_b": "QB21"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9901293633810622,
+      "qubit_a": "QB22",
+      "qubit_b": "QB30"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9568781886706852,
+      "qubit_a": "QB23",
+      "qubit_b": "QB15"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9940755005287792,
+      "qubit_a": "QB23",
+      "qubit_b": "QB24"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9841468557930642,
+      "qubit_a": "QB25",
+      "qubit_b": "QB17"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9965246180017178,
+      "qubit_a": "QB25",
+      "qubit_b": "QB24"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9899933315740266,
+      "qubit_a": "QB25",
+      "qubit_b": "QB26"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.99271991507237,
+      "qubit_a": "QB25",
+      "qubit_b": "QB33"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.975763390390796,
+      "qubit_a": "QB27",
+      "qubit_b": "QB19"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9985778170428714,
+      "qubit_a": "QB27",
+      "qubit_b": "QB26"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9844831061325184,
+      "qubit_a": "QB27",
+      "qubit_b": "QB28"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9907848068644184,
+      "qubit_a": "QB27",
+      "qubit_b": "QB35"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9988661492265714,
+      "qubit_a": "QB29",
+      "qubit_b": "QB21"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9822239972655904,
+      "qubit_a": "QB29",
+      "qubit_b": "QB28"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9956365916673884,
+      "qubit_a": "QB29",
+      "qubit_b": "QB30"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9905889448901825,
+      "qubit_a": "QB29",
+      "qubit_b": "QB37"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9909964347596908,
+      "qubit_a": "QB31",
+      "qubit_b": "QB30"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9968929649901568,
+      "qubit_a": "QB31",
+      "qubit_b": "QB39"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9938314589192992,
+      "qubit_a": "QB32",
+      "qubit_b": "QB33"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9926602964989034,
+      "qubit_a": "QB32",
+      "qubit_b": "QB40"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9960958570980004,
+      "qubit_a": "QB34",
+      "qubit_b": "QB26"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9969675085662526,
+      "qubit_a": "QB34",
+      "qubit_b": "QB33"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9985915322085424,
+      "qubit_a": "QB34",
+      "qubit_b": "QB35"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9952253948782036,
+      "qubit_a": "QB34",
+      "qubit_b": "QB42"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9828787802987344,
+      "qubit_a": "QB36",
+      "qubit_b": "QB28"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9988015266440482,
+      "qubit_a": "QB36",
+      "qubit_b": "QB35"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9901948795289124,
+      "qubit_a": "QB36",
+      "qubit_b": "QB37"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9701650497613752,
+      "qubit_a": "QB36",
+      "qubit_b": "QB44"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9845977332767772,
+      "qubit_a": "QB38",
+      "qubit_b": "QB30"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9858281901970236,
+      "qubit_a": "QB38",
+      "qubit_b": "QB37"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9784059268853004,
+      "qubit_a": "QB38",
+      "qubit_b": "QB39"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.7990194488336917,
+      "qubit_a": "QB38",
+      "qubit_b": "QB46"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9984450326592008,
+      "qubit_a": "QB41",
+      "qubit_b": "QB33"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.99560723830182,
+      "qubit_a": "QB41",
+      "qubit_b": "QB40"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9962743640849198,
+      "qubit_a": "QB41",
+      "qubit_b": "QB42"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9956947853797578,
+      "qubit_a": "QB41",
+      "qubit_b": "QB47"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9499537889665424,
+      "qubit_a": "QB43",
+      "qubit_b": "QB35"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9873915317857732,
+      "qubit_a": "QB43",
+      "qubit_b": "QB42"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9938947273739754,
+      "qubit_a": "QB43",
+      "qubit_b": "QB44"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9872381455086474,
+      "qubit_a": "QB43",
+      "qubit_b": "QB49"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.996709048370104,
+      "qubit_a": "QB44",
+      "qubit_b": "QB50"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9960502564957008,
+      "qubit_a": "QB45",
+      "qubit_b": "QB37"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9946151194666768,
+      "qubit_a": "QB45",
+      "qubit_b": "QB44"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9930266723838844,
+      "qubit_a": "QB45",
+      "qubit_b": "QB51"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9971486091312932,
+      "qubit_a": "QB48",
+      "qubit_b": "QB42"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9966852435036724,
+      "qubit_a": "QB48",
+      "qubit_b": "QB47"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9849142513811866,
+      "qubit_a": "QB48",
+      "qubit_b": "QB49"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9860765836862044,
+      "qubit_a": "QB48",
+      "qubit_b": "QB52"
+    },
+    {
+      "calibrated": false,
+      "fidelity": null,
+      "qubit_a": "QB50",
+      "qubit_b": "QB51"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.995641923247716,
+      "qubit_a": "QB53",
+      "qubit_b": "QB49"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9954209041456668,
+      "qubit_a": "QB53",
+      "qubit_b": "QB52"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9983810657803336,
+      "qubit_a": "QB53",
+      "qubit_b": "QB54"
+    }
+  ],
+  "fetched_at_utc": "2026-06-06T09:24:08+00:00",
+  "gates": {
+    "single_qubit": "prx",
+    "two_qubit": "cz"
+  },
+  "missing": {
+    "couplers": [
+      "QB50-QB51"
+    ],
+    "qubits": []
+  },
+  "qubit_fidelities": {
+    "QB1": 0.9997361985415516,
+    "QB10": 0.9996786147363628,
+    "QB11": 0.9995134788851788,
+    "QB12": 0.9997089168158748,
+    "QB13": 0.9993370620449188,
+    "QB14": 0.9995397450153548,
+    "QB15": 0.9994977892496676,
+    "QB16": 0.9996133983435976,
+    "QB17": 0.9995217460236404,
+    "QB18": 0.9996604791053116,
+    "QB19": 0.9995057304771536,
+    "QB2": 0.9996983754686748,
+    "QB20": 0.9997200106692424,
+    "QB21": 0.9996201372962512,
+    "QB22": 0.9993116430287682,
+    "QB23": 0.999747733806377,
+    "QB24": 0.9996384423676864,
+    "QB25": 0.9979591272769386,
+    "QB26": 0.9992366919572984,
+    "QB27": 0.9996321634910272,
+    "QB28": 0.9996500347045696,
+    "QB29": 0.999698397148182,
+    "QB3": 0.9995751394599072,
+    "QB30": 0.9990745646506438,
+    "QB31": 0.9995708074039352,
+    "QB32": 0.9995878143677098,
+    "QB33": 0.999532645735195,
+    "QB34": 0.9996679144993964,
+    "QB35": 0.9993268606184302,
+    "QB36": 0.9996743977298476,
+    "QB37": 0.9963378278139364,
+    "QB38": 0.999649323145044,
+    "QB39": 0.999686429102869,
+    "QB4": 0.9996675076640084,
+    "QB40": 0.9995680056497646,
+    "QB41": 0.9996581067986402,
+    "QB42": 0.999021252525429,
+    "QB43": 0.9996157831754128,
+    "QB44": 0.9991122339003462,
+    "QB45": 0.9997878963639594,
+    "QB46": 0.99369691801093,
+    "QB47": 0.9994797336086196,
+    "QB48": 0.999592385158008,
+    "QB49": 0.9979638708189498,
+    "QB5": 0.99953496026953,
+    "QB50": 0.999741567801228,
+    "QB51": 0.9995405103826336,
+    "QB52": 0.9996147470490836,
+    "QB53": 0.9997460115443908,
+    "QB54": 0.9996436745897724,
+    "QB6": 0.9996859576212094,
+    "QB7": 0.9994006287749776,
+    "QB8": 0.9991710889068368,
+    "QB9": 0.9945361958448188
+  },
+  "qubits": [
+    {
+      "calibrated": true,
+      "fidelity": 0.9997361985415516,
+      "qubit": "QB1"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9996983754686748,
+      "qubit": "QB2"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9995751394599072,
+      "qubit": "QB3"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9996675076640084,
+      "qubit": "QB4"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.99953496026953,
+      "qubit": "QB5"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9996859576212094,
+      "qubit": "QB6"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9994006287749776,
+      "qubit": "QB7"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9991710889068368,
+      "qubit": "QB8"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9945361958448188,
+      "qubit": "QB9"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9996786147363628,
+      "qubit": "QB10"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9995134788851788,
+      "qubit": "QB11"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9997089168158748,
+      "qubit": "QB12"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9993370620449188,
+      "qubit": "QB13"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9995397450153548,
+      "qubit": "QB14"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9994977892496676,
+      "qubit": "QB15"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9996133983435976,
+      "qubit": "QB16"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9995217460236404,
+      "qubit": "QB17"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9996604791053116,
+      "qubit": "QB18"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9995057304771536,
+      "qubit": "QB19"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9997200106692424,
+      "qubit": "QB20"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9996201372962512,
+      "qubit": "QB21"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9993116430287682,
+      "qubit": "QB22"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.999747733806377,
+      "qubit": "QB23"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9996384423676864,
+      "qubit": "QB24"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9979591272769386,
+      "qubit": "QB25"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9992366919572984,
+      "qubit": "QB26"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9996321634910272,
+      "qubit": "QB27"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9996500347045696,
+      "qubit": "QB28"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.999698397148182,
+      "qubit": "QB29"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9990745646506438,
+      "qubit": "QB30"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9995708074039352,
+      "qubit": "QB31"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9995878143677098,
+      "qubit": "QB32"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.999532645735195,
+      "qubit": "QB33"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9996679144993964,
+      "qubit": "QB34"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9993268606184302,
+      "qubit": "QB35"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9996743977298476,
+      "qubit": "QB36"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9963378278139364,
+      "qubit": "QB37"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.999649323145044,
+      "qubit": "QB38"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.999686429102869,
+      "qubit": "QB39"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9995680056497646,
+      "qubit": "QB40"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9996581067986402,
+      "qubit": "QB41"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.999021252525429,
+      "qubit": "QB42"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9996157831754128,
+      "qubit": "QB43"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9991122339003462,
+      "qubit": "QB44"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9997878963639594,
+      "qubit": "QB45"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.99369691801093,
+      "qubit": "QB46"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9994797336086196,
+      "qubit": "QB47"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.999592385158008,
+      "qubit": "QB48"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9979638708189498,
+      "qubit": "QB49"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.999741567801228,
+      "qubit": "QB50"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9995405103826336,
+      "qubit": "QB51"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9996147470490836,
+      "qubit": "QB52"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9997460115443908,
+      "qubit": "QB53"
+    },
+    {
+      "calibrated": true,
+      "fidelity": 0.9996436745897724,
+      "qubit": "QB54"
+    }
+  ],
+  "schema_version": "1.0",
+  "source": {
+    "method": "backend.metrics.get_gate_fidelity",
+    "package": "iqm_client (iqm.qiskit_iqm.IQMProvider)",
+    "quantum_computer": "emerald",
+    "url": "https://resonance.meetiqm.com",
+    "use_metrics": true
+  },
+  "summary": {
+    "coupler_fidelities_cz": {
+      "count": 86,
+      "max": 0.9988661492265714,
+      "mean": 0.9874656022642304,
+      "min": 0.7990194488336917,
+      "missing": 1
+    },
+    "qubit_fidelities_prx": {
+      "count": 54,
+      "max": 0.9997878963639594,
+      "mean": 0.9992349755081313,
+      "min": 0.99369691801093,
+      "missing": 0
+    }
+  },
+  "warnings": {
+    "notes": "Stderr output 'Missing fidelity for cz.crf_crf.<QBN>__<QBM>' is emitted by iqm_client when the server has no recent calibration for that coupler; such entries appear here with fidelity=null and calibrated=false."
+  }
+}
