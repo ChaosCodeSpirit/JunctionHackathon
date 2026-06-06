@@ -461,7 +461,8 @@ class TestBuildEmeraldQubitMap:
 # ─────────────────────────────────────────────────────────────────────────────
 
 class TestDecodeHardwareResults:
-    def test_mwpm_default_returns_empty_lists(self):
+    def test_mwpm_requires_matcher_or_circuit(self):
+        import pytest
         from run_on_hardware import decode_hardware_results
         syndromes = {
             "det_events": np.zeros((4, 5), dtype=bool),
@@ -469,9 +470,27 @@ class TestDecodeHardwareResults:
             "num_detectors": 5,
             "num_shots": 4,
         }
-        ler, err = decode_hardware_results(syndromes, decoder="mwpm")
-        assert ler == []
-        assert err == []
+        # MWPM decoder requires either matcher or stim_circuit_noisy
+        with pytest.raises(ValueError, match="requires either"):
+            decode_hardware_results(syndromes, decoder="mwpm")
+
+    def test_mwpm_with_stim_circuit(self):
+        from run_on_hardware import decode_hardware_results
+        from surface_code import make_stim_circuit
+        stim_circ = make_stim_circuit(distance=3, rounds=1)
+        syndromes = {
+            "det_events": np.zeros((4, 8), dtype=bool),
+            "obs_flips": np.zeros((4, 1), dtype=bool),
+            "num_detectors": 8,
+            "num_shots": 4,
+        }
+        ler, err = decode_hardware_results(
+            syndromes, decoder="mwpm", stim_circuit_noisy=stim_circ
+        )
+        assert isinstance(ler, list)
+        assert isinstance(err, list)
+        assert len(ler) == 1  # single observable
+        assert len(err) == 1
 
     def test_diffqec_missing_model_path_raises(self):
         from run_on_hardware import decode_hardware_results
@@ -484,7 +503,8 @@ class TestDecodeHardwareResults:
         with pytest.raises(ValueError, match="model_path"):
             decode_hardware_results(syndromes, decoder="diffqec")
 
-    def test_unknown_decoder_returns_empty(self):
+    def test_unknown_decoder_raises_value_error(self):
+        import pytest
         from run_on_hardware import decode_hardware_results
         syndromes = {
             "det_events": np.zeros((4, 5), dtype=bool),
@@ -492,9 +512,8 @@ class TestDecodeHardwareResults:
             "num_detectors": 5,
             "num_shots": 4,
         }
-        ler, err = decode_hardware_results(syndromes, decoder="unknown")
-        assert ler == []
-        assert err == []
+        with pytest.raises(ValueError, match="Unknown decoder"):
+            decode_hardware_results(syndromes, decoder="unknown")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
