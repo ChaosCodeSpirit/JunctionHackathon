@@ -2,7 +2,8 @@
 # SLURM script: train noisy-diffqec on a single LUMI-G node (one MI250X GCD).
 #
 # Submit with:
-#     sbatch --account=<your-project> lumi/train.slurm
+#     sbatch lumi/train.slurm           # uses the default account below
+#     sbatch --account=project_xxx lumi/train.slurm   # override per-job
 #
 # The script defaults to a moderate d=5 run that fits in <2 GB of VRAM and
 # finishes in well under the 30-minute queue limit.  Override any of the
@@ -21,6 +22,7 @@
 #     ACCOUNT       SLURM billing project         (override on cmdline)
 
 #SBATCH --job-name=noisy-diffqec
+#SBATCH --account=${LUMI_ACCOUNT:-project_465003017}
 #SBATCH --partition=${PARTITION:-small-g}
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
@@ -45,8 +47,8 @@ echo "[train.slurm] project=${PROJECT_ROOT}  ckpt=${CKPT_DIR}"
 module load LUMI/24.03 partition/G rocm/6.0.3 2>/dev/null || true
 source "${VENV_DIR}/bin/activate"
 
-export HF_HOME=/scratch/${SLURM_JOB_USER:-$(id -un)}/hf-cache
-export TORCH_HOME=/scratch/${SLURM_JOB_USER:-$(id -un)}/torch-cache
+export HF_HOME=/scratch/${SLURM_JOB_USER:-${LUMI_USER:-siljheis}}/hf-cache
+export TORCH_HOME=/scratch/${SLURM_JOB_USER:-${LUMI_USER:-siljheis}}/torch-cache
 mkdir -p "${HF_HOME}" "${TORCH_HOME}"
 
 cd "${PROJECT_ROOT}"

@@ -30,7 +30,7 @@ hosted by CSC in Finland.
 ```bash
 # 1.  Log in to LUMI and clone the repo on /scratch
 ssh lumi.csc.fi
-cd /scratch/<project>/$USER
+cd /scratch/project_465003017
 git clone https://github.com/<your-org>/JunctionHackathon.git
 cd JunctionHackathon
 git checkout feature/diffqec-noisy
@@ -40,11 +40,11 @@ module load LUMI/24.03 partition/G
 bash lumi/install.sh
 source .venv-lumi/bin/activate
 
-# 3.  Submit a single training job
-sbatch --account=<project_xxx> lumi/train.slurm
+# 3.  Submit a single training job (uses the default account project_465003017)
+sbatch lumi/train.slurm
 
 # 4.  Or submit the full noise sweep
-sbatch --account=<project_xxx> lumi/sweep.slurm
+sbatch lumi/sweep.slurm
 ```
 
 ## Customising the runs
@@ -54,14 +54,14 @@ the typical workflow is:
 
 ```bash
 # A larger, longer d=7 run
-sbatch --account=<project_xxx> \
-    --export=DISTANCE=7,ROUNDS=7,SHOTS=40000,EPOCHS=50 \
-    lumi/train.slurm
+sbatch --export=DISTANCE=7,ROUNDS=7,SHOTS=40000,EPOCHS=50 lumi/train.slurm
 
 # A 3-distance, 8-scale sweep = 24 jobs
-sbatch --account=<project_xxx> \
-    --export=DISTANCES_CSV="3 5 7",SCALES_CSV="0.25 0.5 0.75 1.0 1.25 1.5 1.75 2.0" \
+sbatch --export=DISTANCES_CSV="3 5 7",SCALES_CSV="0.25 0.5 0.75 1.0 1.25 1.5 1.75 2.0" \
     lumi/sweep.slurm
+
+# Use a different billing project (overrides the default project_465003017)
+sbatch --export=LUMI_ACCOUNT=project_465000123 lumi/sweep.slurm
 ```
 
 The default `partition=small-g` is meant for short jobs (< 6h) and is the

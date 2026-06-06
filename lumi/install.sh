@@ -19,14 +19,23 @@ set -euo pipefail
 PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 VENV_DIR="${PROJECT_ROOT}/.venv-lumi"
 PYTHON_BIN="${PYTHON:-python}"
+LUMI_USER_DEFAULT="siljheis"
+LUMI_USER="${LUMI_USER:-${LUMI_USER_DEFAULT}}"
 
 echo "[lumi/install] project root: ${PROJECT_ROOT}"
 echo "[lumi/install] venv dir    : ${VENV_DIR}"
+echo "[lumi/install] LUMI user   : ${LUMI_USER}"
 
 # 1. LUMI-side ROCm toolchain ------------------------------------------------
 module load LUMI/24.03 2>/dev/null || true
 module load partition/G 2>/dev/null || true
 module load rocm/6.0.3 2>/dev/null || true
+
+# Sanity check: confirm we are on a LUMI login node before we start
+# modifying the user environment.
+if [[ ! -d /scratch ]]; then
+    echo "WARNING: /scratch not present — this script expects a LUMI host." >&2
+fi
 
 # 2. Create a venv in the project's scratch-friendly location ---------------
 if [[ ! -d "${VENV_DIR}" ]]; then

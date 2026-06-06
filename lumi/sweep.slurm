@@ -6,12 +6,14 @@
 # short job, ideal for filling a queue quickly.
 #
 # Submit with:
-#     sbatch --account=<your-project> lumi/sweep.slurm
+#     sbatch lumi/sweep.slurm           # uses the default account below
+#     sbatch --account=project_xxx lumi/sweep.slurm   # override per-job
 #
 # The number of array tasks is the product of #distances × #scales.
 # Default: 2 distances (3, 5) × 6 scales (0.5 .. 2.0) = 12 tasks.
 
 #SBATCH --job-name=noisy-diffqec-sweep
+#SBATCH --account=${LUMI_ACCOUNT:-project_465003017}
 #SBATCH --partition=${PARTITION:-small-g}
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
