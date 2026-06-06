@@ -13,7 +13,7 @@ because of short cycles in the factor graph; OSD post-processes the
 BP result to recover the optimal solution. Set ``osd_order=0`` to
 disable OSD and run plain BP.
 """
-from typing import List, Optional, Tuple
+from typing import List, Optional, Sequence, Tuple
 import numpy as np
 import scipy.sparse as sp
 import stim
@@ -97,6 +97,7 @@ def build_bp_decoder(
     ms_scaling_factor: float = 1.0,
     osd_order: int = 2,
     osd_method: str = "osd_cs",
+    error_channel: Optional[Sequence[float]] = None,
 ) -> Tuple[ldpc.BpOsdDecoder, np.ndarray]:
     """Build an ``ldpc.BpOsdDecoder`` from a noisy Stim circuit.
 
@@ -123,11 +124,26 @@ def build_bp_decoder(
                          a good default for QEC.
     osd_method         : OSD variant; 'osd_cs' (combinatorial sweep)
                          is the standard.
+    error_channel      : optional sequence of per-error probabilities
+                         (one entry per error mechanism in the DEM).
+                         If provided, overrides the DEM-derived priors.
+                         This is the calibration hook: feed it
+                         Resonance-derived per-gate/per-qubit error
+                         rates here. If None, the DEM defaults are used.
     """
     H, O, probs = dem_to_pcm(stim_circuit_noisy)
+    if error_channel is None:
+        channel = probs.tolist()
+    else:
+        channel = list(error_channel)
+        if len(channel) != H.shape[1]:
+            raise ValueError(
+                f"error_channel has {len(channel)} entries, "
+                f"expected {H.shape[1]} (one per DEM error mechanism)."
+            )
     decoder = ldpc.BpOsdDecoder(
         H,
-        error_channel=probs.tolist(),
+        error_channel=channel,
         max_iter=max_iter,
         bp_method=bp_method,
         schedule=schedule,
