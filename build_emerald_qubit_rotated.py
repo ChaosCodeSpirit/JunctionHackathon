@@ -1,6 +1,6 @@
 
 
-from surface_code_stim import get_qubit_lists
+from internal_helpers import get_qubit_lists
 import stim
 
 
