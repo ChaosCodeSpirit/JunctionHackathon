@@ -9,6 +9,11 @@ dist/
 build/
 .DS_Store
 
+# Coverage artifacts
+.coverage
+htmlcov/
+coverage.xml
+
 # LUMI secrets and runtime artifacts
 lumi/.env
 *.pt

@@ -39,7 +39,7 @@ jobs:
       - name: Run tests with coverage
         run: |
           pytest \
-            --cov=. \
+            --cov \
             --cov-report=term-missing \
             --cov-report=xml \
             --cov-report=html \
