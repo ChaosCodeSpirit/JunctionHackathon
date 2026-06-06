@@ -22,22 +22,31 @@ LUMI_USER="${LUMI_USER:-${LUMI_USER_DEFAULT}}"
 
 # Pick a Python.  LUMI/25.03 does not put python on PATH by default —
 # you need `module load cray-python` to get a working interpreter.
-# Try a few module loads until we find one.
-for py in "" "cray-python/3.11" "cray-python/3.12" "cray-python"; do
-    if [[ -n "${py}" ]]; then
-        module load "${py}" 2>/dev/null || true
+# IMPORTANT: the bare system /usr/bin/python3 on LUMI is 3.6, which is
+# too old for qiskit 2.x.  Force-load a Cray Python and skip any
+# pre-existing <3.10 interpreters.
+
+MIN_PY_MAJOR=3
+MIN_PY_MINOR=10
+
+# Always load a Cray Python, even if a python3 is on PATH (3.6 is bogus).
+for py in "cray-python/3.12" "cray-python/3.11" "cray-python" "python/3.12" "python"; do
+    if module load "${py}" 2>/dev/null; then
+        echo "[lumi/install] loaded ${py}"
     fi
     if command -v python3 >/dev/null 2>&1; then
-        PYTHON_BIN="python3"; break
-    fi
-    if command -v python >/dev/null 2>&1; then
-        PYTHON_BIN="python"; break
+        ver=$(python3 -c 'import sys; print("%d.%d"%sys.version_info[:2])' 2>/dev/null || echo "0.0")
+        if python3 -c "import sys; sys.exit(0 if sys.version_info >= (${MIN_PY_MAJOR}, ${MIN_PY_MINOR}) else 1)" 2>/dev/null; then
+            PYTHON_BIN="python3"; break
+        else
+            echo "[lumi/install] ${py} -> python3 ${ver}, too old; trying next"
+        fi
     fi
 done
 
 if [[ -z "${PYTHON_BIN:-}" ]]; then
-    echo "ERROR: no python on PATH after trying to load cray-python." >&2
-    echo "  Run 'module avail cray-python' and report the available versions." >&2
+    echo "ERROR: no usable Python >= ${MIN_PY_MAJOR}.${MIN_PY_MINOR} on LUMI." >&2
+    echo "  Run 'module avail cray-python python' on uanNN and tell me the versions." >&2
     exit 1
 fi
 
