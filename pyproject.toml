@@ -2,7 +2,7 @@
 name = "junctionhackathon"
 version = "0.1.0"
 description = "Add your description here"
-requires-python = ">=3.13"
+requires-python = ">=3.11"
 dependencies = [
     "iqm-client==34.0.3",
     "iqm-qubit-selector>=0.0.1",
