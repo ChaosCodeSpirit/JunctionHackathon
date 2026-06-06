@@ -1,0 +1,8 @@
+# LUMI dependencies for the 54-qubit DiffQEC benchmark.
+# Pinned to versions verified working together.
+qiskit==2.4.1
+qiskit-aer==0.17.2
+stim==1.16.0
+pymatching==2.4.0
+numpy==2.4.4
+torch>=2.0

@@ -23,3 +23,16 @@ results/
 *.npz
 *.npy
 !tests/**/*.npy
+
+# Coverage artifacts
+.coverage
+htmlcov/
+coverage.xml
+
+# LUMI secrets and runtime artifacts
+lumi/.env
+*.pt
+local_bench.json
+test_bench.json
+benchmark_results.json
+lumi/logs/
